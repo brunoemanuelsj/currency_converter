@@ -357,7 +357,7 @@ export default {
   },
   methods: {
     converter() {
-      let url = `https://free.currconv.com/api/v7/convert?q=${this.moedaA}_${this.moedaB}&compact=ultra&apiKey=bad0977ef48e42db5ab5`;
+      let url = `https://free.currconv.com/api/v7/convert?q=${this.moedaA}_${this.moedaB}&compact=ultra&apiKey=`;
       fetch(url)
         .then((res) => {
           return res.json();
