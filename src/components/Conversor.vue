@@ -1,6 +1,7 @@
 <template>
+
   <div class="conversor">
-    <h2>
+    <div class="r1">
       <input list="curr" v-model="moedaA" class="select" />
       <datalist id="curr">
         <option value="AED">AED</option>
@@ -335,13 +336,22 @@
 
         <option value="ZWL">ZWL</option>
       </datalist>
-      to
+
+      <div class="r1-mid">
+        <div @click="reverse" class="reverse">
+          <svg viewBox="0 0 24 24"><path d="M6.99 11L3 15l3.99 4v-3H14v-2H6.99v-3zM21 9l-3.99-4v3H10v2h7.01v3L21 9z"></path></svg>
+        </div>
+        <div>to</div>
+      </div>
+
       <input list="curr" v-model="moedaB" class="select" />
-    </h2>
+    </div>
+
     <input type="number" v-model="moedaA_value" :placeholder="moedaA" />
     <input type="button" value="Converter" @click="converter" />
-    <h2>{{ moedaB_value }}</h2>
+    <h2 class="result">{{ moedaB_value }}</h2>
   </div>
+
 </template>
 
 <script>
@@ -357,6 +367,11 @@ export default {
   },
   methods: {
     converter() {
+
+      if(!this.moedaA || !this.moedaB || !this.moedaA_value){
+        return
+      }
+
       let url = `https://free.currconv.com/api/v7/convert?q=${this.moedaA}_${this.moedaB}&compact=ultra&apiKey=bad0977ef48e42db5ab5`;
       fetch(url)
         .then((res) => {
@@ -369,6 +384,17 @@ export default {
           );
         });
     },
+
+    reverse(){
+      if(!this.moedaA || !this.moedaB ){
+        return
+      }
+
+      let aux = this.moedaA
+      this.moedaA = this.moedaB
+      this.moedaB = aux
+      console.log("reverse");
+    }
   },
 };
 </script>
@@ -376,25 +402,44 @@ export default {
 <style scoped>
 .conversor {
   min-width: 300px;
-  max-width: 500px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   padding: 20px;
-  background: initial;
   background-color: #1119;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  height: 300px;
+}
+
+.reverse{
+  display: flex;
+  cursor: pointer;
+  color: white;
+  background-color:#fff9;
+  margin: 0 0 10px 0;
+  border-radius: 5px;
+  border-right: 2px solid black;
+  border-bottom: 2px solid black;
+  height: 25px;
+  width: 25px;
+}
+
+.r1{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  width: 100%;
 }
 
 .select {
   height: 50px;
   width: 90px;
-  font-size: 0.5em;
-}
-
-@media only screen and (min-width: 700px) {
-  .select {
-    height: 60px;
-    width: 120px;
-    font-size: 1em;
-  }
+  font-size: 1em;
+  border-radius: 5px;
+  outline: none;
+  border: none;
+  text-align: center;
 }
 
 input[type="number"],
@@ -410,8 +455,8 @@ select {
 }
 
 input[type="button"] {
-  font-size: 1em;
   width: 100%;
+  font-size: 1em;
   background-color: #6e36f1;
   color: white;
   padding: 14px 20px;
@@ -419,5 +464,9 @@ input[type="button"] {
   border: none;
   border-radius: 4px;
   cursor: pointer;
+}
+
+.result{
+  margin: 0;
 }
 </style>
